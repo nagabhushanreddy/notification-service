@@ -1,0 +1,90 @@
+# Notification Service Application Configuration
+
+service:
+  name: ${APP_NAME:notification-service}
+  version: ${APP_VERSION:1.0.0}
+  environment: ${ENVIRONMENT:development}
+  debug: ${DEBUG:false}
+
+server:
+  host: ${HOST:0.0.0.0}
+  port: ${PORT:8004}
+
+# External Service URLs
+external_services:
+  auth_service:
+    url: ${AUTH_SERVICE_URL:http://localhost:3001}
+    timeout: ${AUTH_SERVICE_TIMEOUT:5}
+  
+  entity_service:
+    url: ${ENTITY_SERVICE_URL:http://localhost:8000}
+    timeout: ${ENTITY_SERVICE_TIMEOUT:5}
+  
+  document_service:
+    url: ${DOCUMENT_SERVICE_URL:http://localhost:8001}
+    timeout: ${DOCUMENT_SERVICE_TIMEOUT:5}
+
+# Database Configuration
+database:
+  engine: ${DB_ENGINE:postgresql}
+  url: ${DATABASE_URL:postgresql+asyncpg://user:password@localhost:5432/notification_db}
+  echo: ${DB_ECHO:false}
+  pool_size: ${DB_POOL_SIZE:10}
+  max_overflow: ${DB_MAX_OVERFLOW:20}
+
+# Redis (for message queue, templates cache)
+redis:
+  enabled: ${REDIS_ENABLED:true}
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+  db: ${REDIS_DB:2}
+  password: ${REDIS_PASSWORD:}
+  ttl: ${REDIS_TTL:3600}
+
+# JWT Configuration
+jwt:
+  access_secret: ${JWT_ACCESS_SECRET:your-super-secret-access-key-min-32-chars}
+  algorithm: ${JWT_ALGORITHM:HS256}
+
+# Correlation ID
+correlation_id:
+  enabled: ${CORRELATION_ID_ENABLED:true}
+  header_name: ${CORRELATION_ID_HEADER:x-correlation-id}
+
+# API Documentation
+api_docs:
+  enabled: ${API_DOCS_ENABLED:true}
+  title: ${API_TITLE:Notification Service API}
+  version: ${API_VERSION:1.0.0}
+  description: ${API_DESCRIPTION:Multi-channel notification orchestration}
+
+# Notification Service Specific
+notification_channels:
+  email:
+    enabled: ${EMAIL_ENABLED:true}
+    provider: ${EMAIL_PROVIDER:smtp}
+    from_address: ${EMAIL_FROM:noreply@finance.local}
+  
+  sms:
+    enabled: ${SMS_ENABLED:true}
+    provider: ${SMS_PROVIDER:twilio}
+    account_sid: ${SMS_ACCOUNT_SID:}
+    auth_token: ${SMS_AUTH_TOKEN:}
+  
+  whatsapp:
+    enabled: ${WHATSAPP_ENABLED:true}
+    provider: ${WHATSAPP_PROVIDER:twilio}
+    account_sid: ${WHATSAPP_ACCOUNT_SID:}
+    auth_token: ${WHATSAPP_AUTH_TOKEN:}
+  
+  push:
+    enabled: ${PUSH_ENABLED:true}
+    provider: ${PUSH_PROVIDER:firebase}
+    api_key: ${PUSH_API_KEY:}
+
+# Notification Configuration
+notification:
+  max_retries: ${NOTIFICATION_MAX_RETRIES:3}
+  retry_delay_ms: ${NOTIFICATION_RETRY_DELAY:5000}
+  batch_size: ${NOTIFICATION_BATCH_SIZE:100}
+  queue_name: ${NOTIFICATION_QUEUE:notifications}
